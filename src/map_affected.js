@@ -36,7 +36,8 @@ export function map_affected(){
 }
 
 function mouseover (d){
-    d3.select(this).attr('fill', '#191970')
+    d3.select(this)
+        .attr('fill', '#191970');
 }
 
 function mouseout (d){
@@ -44,6 +45,7 @@ function mouseout (d){
 }
 
 function click (d){
+        
     console.log(d);
     area_chart(d.properties.name, 'United States of America');
 
