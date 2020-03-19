@@ -30,6 +30,25 @@ const SVG_AREA_CHART = d3.select("#div_area")
                                 .attr("height", HEIGHT + MARGIN.top + MARGIN.bottom)
                                 .append("g")
                                 .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
+
+var x = d3.scaleTime() // this is the scale for time domains
+                .range([ 0, WIDTH ]); // the ouput range, which the input data should fit
+
+var xAxis = d3.axisBottom().scale(x); //Initialize X axis
+
+SVG_AREA_CHART.append("g")
+                .attr("transform", `translate(0,${HEIGHT})`) // axes are always rendered at the origin, that's why we need to transform them accordingly
+                .attr("class","Xaxis_area_chart")
+
+var y = d3.scaleLinear() // this is the quantitative scale for values
+                .range([ HEIGHT, 0 ]); // the ouput range, which the input data should fit
+
+var yAxis = d3.axisLeft().scale(y); //Initialize Y axis
+
+SVG_AREA_CHART.append("g")
+                .attr("class","Yaxis_area_chart");
+                
+
 var data;
 d3.csv('./data/data.csv',   //url
     function (d){           // row conversion function
@@ -53,36 +72,42 @@ d3.csv('./data/data.csv',   //url
 
     export function area_chart(affected, implementer){
 
-        data = data.filter(d => d.affected == affected) // modelling API request of Affected == Canada
-        data = data.filter(d => d.implementer == implementer) // modelling API request of implementer == United States of America
-        console.log(data);
+        let data_chart = data.filter(d => d.affected == affected && d.implementer == implementer) // modelling API request of Affected == Canada and implementer == United States of America
 
-            // Add X axis
-            const x = d3.scaleTime() // this is the scale for time domains
-            .domain(d3.extent(data, d => new Date(+d.year,0) )) // the input data range 
-            .range([ 0, WIDTH ]); // the ouput range, which the input data should fit
+        console.log({affected: affected, implementer: implementer});
+        console.log(data_chart)
 
-        SVG_AREA_CHART.append("g")
-                .attr("transform", `translate(0,${HEIGHT})`) // axes are always rendered at the origin, that's why we need to transform them accordingly
-                .call(d3.axisBottom(x));    // renders reference marks for scales
+        // Add X axis
+        x = x.domain(d3.extent(data_chart, d => new Date(+d.year,0) )) // the input data range 
 
-            // Add Y axis
-        const y = d3.scaleLinear() // this is the quantitative scale
-                .domain([0, d3.max(data, d => d.value )]) // the input data range from min to max
-                .range([ HEIGHT, 0 ]); // the ouput range, which the input data should fit
+        SVG_AREA_CHART.selectAll(".Xaxis_area_chart")
+                        .transition() //gradual transition between previous and current state of X axis
+                        .call(xAxis);
+    
+        // Add Y axis
+        y = y.domain([0, d3.max(data_chart, d => d.value )]) // the input data range from min to max
 
-        SVG_AREA_CHART.append("g")
-                .call(d3.axisLeft(y)); // renders reference marks for scales
+        SVG_AREA_CHART.selectAll(".Yaxis_area_chart")
+                        .transition() //gradual transition between previous and current state of Y axis
+                        .call(yAxis); // renders reference marks for scales
 
-            // Add the area chart
-        SVG_AREA_CHART.append("path")
-                .datum(data) // binds data into an element
-                .attr("fill", "#cce5df")
-                .attr("stroke", "#69b3a2")
-                .attr("stroke-width", 1.5)
-                .attr("d", d3.area() //Constructs an area generator
-                .x(d => x(new Date(+d.year,0)))
-                .y0(y(0))   // sets bottom 'limit', eg zero
-                .y1(d => y(d.value) )
-                )
+        var area = d3.area() //Constructs an area generator
+                        .x(d => x(new Date(+d.year,0)))
+                        .y0(y(0))   // sets bottom 'limit', eg zero
+                        .y1(d => y(d.value) );
+
+        var update = SVG_AREA_CHART.selectAll(".area_path") // create update selection and bind new data
+                        .data([data_chart]);
+
+
+           update
+              .enter()
+                  .append("path")
+                  .attr("class","area_path")
+                  .merge(update) // merge previous data and update data for the area chart
+                  .transition() // gradual transition between previous and current area charts
+                  .attr("fill", "#cce5df")
+                  .attr("stroke", "#69b3a2")
+                  .attr("stroke-width", 1.5)
+                  .attr("d", area)
     }
