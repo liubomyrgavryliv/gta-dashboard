@@ -17,11 +17,20 @@ d3.select('body')
         .attr('id', 'div_area')
         .classed('row', true);
 
-// append div for the maps
-d3.select('body')
+// append divs for the maps
+const DIV_MAPS = d3.select('body')
+                    .append('div')
+                    .attr('id', 'div_maps')
+                    .classed('row', true);
+    DIV_MAPS            
         .append('div')
-        .attr('id', 'div_maps')
-        .classed('row', true);
+        .attr('id', 'div_affected')
+        .classed('column', true);
+
+    DIV_MAPS
+        .append('div')
+        .attr('id', 'div_implementer')
+        .classed('column', true);
 
 const SVG_AREA_CHART = d3.select("#div_area")
                             .append("svg")
@@ -70,7 +79,7 @@ d3.csv('./data/data.csv',   //url
     map_implementer();     // build map Implementer from the module map_implementer.js
 
 
-    export function area_chart(affected, implementer){
+    export function area_chart(affected = 'Canada', implementer = 'China'){
 
         let data_chart = data.filter(d => d.affected == affected && d.implementer == implementer) // modelling API request of Affected == Canada and implementer == United States of America
 

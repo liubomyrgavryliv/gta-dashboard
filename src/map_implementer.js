@@ -4,13 +4,16 @@ import { area_chart } from './index.js';
 
 export function map_implementer(){
 
-    const SVG_MAP_IMPLEMENTER = d3.select("#div_maps")
-    .append("svg")
+    //append title to div
+    d3.select('#div_implementer')
+        .append('p')
+        .html('Implementing jurisdiction')
+
+    const SVG_MAP_IMPLEMENTER = d3.select("#div_implementer")
+        .append("svg")
         .attr('id', 'map_implementer')
         .attr("width", WIDTH/2 + MARGIN.left + MARGIN.right)
         .attr("height", HEIGHT + MARGIN.top + MARGIN.bottom);
-
-        
 
     const PROJECTION = geoNaturalEarth()
         .scale(WIDTH / 3 / Math.PI)
@@ -28,17 +31,50 @@ export function map_implementer(){
             .style("stroke", "#fff");
 
         d3.selectAll('#map_implementer path')
-            .on('click', d => console.log(d))
+            .on('click', click)
             .on('mouseover', mouseover)
             .on('mouseout', mouseout)
+
+        d3.select('#map_implementer g')
+            .append('rect')
+            .classed('maps_background', true)
+            .attr("width", WIDTH/2 + MARGIN.left + MARGIN.right)
+            .attr("height", HEIGHT + MARGIN.top + MARGIN.bottom)
+            .on('click', () => { 
+                d3.selectAll('.implementer_selected')
+                    .classed('implementer_selected', false);
+                    
+                d3.selectAll('#map_implementer path')
+                    .on('mouseover', mouseover)
+                    .on('mouseout', mouseout);
+             })
+             .lower()
     })
 
 }
 
 function mouseover (d){
-    d3.select(this).attr('fill', '#8B0000')
+    d3.select(this)
+        .classed('implementer_selected', true);
 }
 
 function mouseout (d){
-    d3.select(this).attr('fill', '#9370DB')
+    d3.select(this)
+        .classed('implementer_selected', false);
+}
+
+function click (d){
+    d3.selectAll('.implementer_selected')
+        .classed('implementer_selected', false);
+
+    d3.select(this)
+        .classed('implementer_selected', true)
+        .on('mouseout', null);
+
+    d3.selectAll('#map_implementer g path')
+        .on('mouseover', null)
+
+    console.log(d);
+    let affected = d3.select('.affected_selected').empty() ? null : d3.select('.affected_selected').datum().properties.name; // check if affected is selected
+    area_chart(affected, d.properties.name);
 }

@@ -1,6 +1,36 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .row {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
  }
+
+ .column{
+     text-align: center;
+ }
+
+ .column p{
+    font-weight: 600;
+    color: #00008B;
+ }
+
+ .affected_selected{
+     fill: #191970;
+ }
+
+ .implementer_selected{
+    fill:  #8B0000;
+}
+
+
+ .affected_unselected{
+    fill: #2F4F4F;
+}
+
+.maps_background{
+    fill: transparent;
+}
