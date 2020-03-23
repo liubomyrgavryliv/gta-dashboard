@@ -2,14 +2,22 @@ import { geoNaturalEarth } from "d3-geo-projection";
 import { MARGIN, WIDTH, HEIGHT } from './index.js';
 import { area_chart } from './index.js';
 
-export function map_affected(){
+export const map_affected = function (){
+
+const div_affected =  d3.select('#div_affected');
 
     //append title to div
-    d3.select('#div_affected')
+    div_affected
         .append('p')
-        .html('Affected jurisdiction')
+        .html('Affected jurisdiction');
 
-    const SVG_MAP_AFFECTED = d3.select("#div_affected")
+    //append name of selected affected country to div
+    div_affected
+        .append('p')
+        .classed('title_affected', true)
+        .text('Please, choose country...');
+
+    const SVG_MAP_AFFECTED = div_affected
         .append("svg")
         .attr('id', 'map_affected')
         .attr("width", WIDTH/2 + MARGIN.left + MARGIN.right)
@@ -17,7 +25,7 @@ export function map_affected(){
 
     const PROJECTION = geoNaturalEarth()
         .scale(WIDTH / 3 / Math.PI)
-        .translate([WIDTH / 4, HEIGHT / 2])
+        .translate([WIDTH / 4, HEIGHT / 2]);
 
     // Load external data and boot
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function(data){
@@ -56,11 +64,17 @@ export function map_affected(){
 function mouseover (d){
     d3.select(this)
         .classed('affected_selected', true);
+
+    d3.select('.title_affected')
+        .text(d.properties.name)
 }
 
 function mouseout (d){
     d3.select(this)
         .classed('affected_selected', false);
+
+    d3.select('.title_affected')
+        .text('Please, choose country...')
 }
 
 function click (d){

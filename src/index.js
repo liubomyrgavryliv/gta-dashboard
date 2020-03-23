@@ -74,49 +74,47 @@ d3.csv('./data/data.csv',   //url
             area_chart('Canada', 'United States of America');
     })
 
+        map_affected();     // build map Affected from the module map_affected.js
+        map_implementer();     // build map Implementer from the module map_implementer.js
 
-    map_affected();     // build map Affected from the module map_affected.js
-    map_implementer();     // build map Implementer from the module map_implementer.js
+export const area_chart = function (affected = 'Canada', implementer = 'China'){
 
+    let data_chart = data.filter(d => d.affected == affected && d.implementer == implementer) // modelling API request of Affected == Canada and implementer == United States of America
 
-    export function area_chart(affected = 'Canada', implementer = 'China'){
+    console.log({affected: affected, implementer: implementer});
+    console.log(data_chart)
 
-        let data_chart = data.filter(d => d.affected == affected && d.implementer == implementer) // modelling API request of Affected == Canada and implementer == United States of America
+    // Add X axis
+    x = x.domain(d3.extent(data_chart, d => new Date(+d.year,0) )) // the input data range 
 
-        console.log({affected: affected, implementer: implementer});
-        console.log(data_chart)
+    SVG_AREA_CHART.selectAll(".Xaxis_area_chart")
+                    .transition() //gradual transition between previous and current state of X axis
+                    .call(xAxis);
 
-        // Add X axis
-        x = x.domain(d3.extent(data_chart, d => new Date(+d.year,0) )) // the input data range 
+    // Add Y axis
+    y = y.domain([0, d3.max(data_chart, d => d.value )]) // the input data range from min to max
 
-        SVG_AREA_CHART.selectAll(".Xaxis_area_chart")
-                        .transition() //gradual transition between previous and current state of X axis
-                        .call(xAxis);
-    
-        // Add Y axis
-        y = y.domain([0, d3.max(data_chart, d => d.value )]) // the input data range from min to max
+    SVG_AREA_CHART.selectAll(".Yaxis_area_chart")
+                    .transition() //gradual transition between previous and current state of Y axis
+                    .call(yAxis); // renders reference marks for scales
 
-        SVG_AREA_CHART.selectAll(".Yaxis_area_chart")
-                        .transition() //gradual transition between previous and current state of Y axis
-                        .call(yAxis); // renders reference marks for scales
+    var area = d3.area() //Constructs an area generator
+                    .x(d => x(new Date(+d.year,0)))
+                    .y0(y(0))   // sets bottom 'limit', eg zero
+                    .y1(d => y(d.value) );
 
-        var area = d3.area() //Constructs an area generator
-                        .x(d => x(new Date(+d.year,0)))
-                        .y0(y(0))   // sets bottom 'limit', eg zero
-                        .y1(d => y(d.value) );
-
-        var update = SVG_AREA_CHART.selectAll(".area_path") // create update selection and bind new data
-                        .data([data_chart]);
+    var update = SVG_AREA_CHART.selectAll(".area_path") // create update selection and bind new data
+                    .data([data_chart]);
 
 
-           update
-              .enter()
-                  .append("path")
-                  .attr("class","area_path")
-                  .merge(update) // merge previous data and update data for the area chart
-                  .transition() // gradual transition between previous and current area charts
-                  .attr("fill", "#cce5df")
-                  .attr("stroke", "#69b3a2")
-                  .attr("stroke-width", 1.5)
-                  .attr("d", area)
-    }
+        update
+            .enter()
+                .append("path")
+                .attr("class","area_path")
+                .merge(update) // merge previous data and update data for the area chart
+                .transition() // gradual transition between previous and current area charts
+                .attr("fill", "#cce5df")
+                .attr("stroke", "#69b3a2")
+                .attr("stroke-width", 1.5)
+                .attr("d", area)
+}

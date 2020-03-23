@@ -2,7 +2,7 @@ import { geoNaturalEarth } from "d3-geo-projection";
 import { MARGIN, WIDTH, HEIGHT } from './index.js';
 import { area_chart } from './index.js';
 
-export function map_implementer(){
+export const map_implementer = function (){
 
     //append title to div
     d3.select('#div_implementer')
