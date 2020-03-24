@@ -72,11 +72,12 @@ d3.csv('./data/data.csv',   //url
             console.log(d)
             data = d;
             area_chart('Canada', 'United States of America');
+           
+            map_affected();     // build map Affected from the module map_affected.js
+            map_implementer( DATA_FOR_MAP(data, 'implementer') );     // build map Implementer from the module map_implementer.js
     })
 
-        map_affected();     // build map Affected from the module map_affected.js
-        map_implementer();     // build map Implementer from the module map_implementer.js
-
+        
 export const area_chart = function (affected = 'Canada', implementer = 'China'){
 
     let data_chart = data.filter(d => d.affected == affected && d.implementer == implementer) // modelling API request of Affected == Canada and implementer == United States of America
@@ -117,4 +118,18 @@ export const area_chart = function (affected = 'Canada', implementer = 'China'){
                 .attr("stroke", "#69b3a2")
                 .attr("stroke-width", 1.5)
                 .attr("d", area)
+}
+
+// function to feed 'country-total values' to maps
+const DATA_FOR_MAP = function (data, type){
+
+    let filtered = data.map( d => d[type]).filter((el, index, arr) => { return arr.indexOf(el) == index }); 
+    let output = [];
+    for (let country of filtered){
+        let all = data.filter(d => d[type] == country);
+        let value = all.reduce((acc, el, index, arr) => { return acc + el.value }, 0);
+        output.push({ country: country, value: value })
+    }
+    return output;
+
 }
