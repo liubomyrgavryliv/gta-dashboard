@@ -1,5 +1,21 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
+
 body{
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto Mono', sans-serif;
+}
+
+g text {
+    font-family: 'Roboto Mono', sans-serif;
+}
+
+h1  {
+    font-weight: 600;
+    font-size: 1em;
+}
+
+p   {
+    font-weight: 500;
+    font-size: 1em;
 }
 
 .row {
@@ -11,11 +27,6 @@ body{
 
  .column{
      text-align: center;
- }
-
- .column p{
-    font-weight: 600;
-    color: #00008B;
  }
 
  .affected_selected{

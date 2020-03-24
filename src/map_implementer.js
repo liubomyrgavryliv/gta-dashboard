@@ -4,20 +4,29 @@ import { area_chart } from './index.js';
 
 export const map_implementer = function (){
 
-    //append title to div
-    d3.select('#div_implementer')
-        .append('p')
-        .html('Implementing jurisdiction')
+    const div_implementer =  d3.select('#div_implementer');
 
-    const SVG_MAP_IMPLEMENTER = d3.select("#div_implementer")
+    //append title to div
+    div_implementer
+        .append('h1')
+        .text('Implementing jurisdiction');
+
+    //append name of selected affected country to div
+    div_implementer
+        .append('p')
+        .classed('title_implementer', true);
+
+        set_title(); //set initial title for country
+
+    const SVG_MAP_IMPLEMENTER = div_implementer //set canvas for map
         .append("svg")
         .attr('id', 'map_implementer')
         .attr("width", WIDTH/2 + MARGIN.left + MARGIN.right)
         .attr("height", HEIGHT + MARGIN.top + MARGIN.bottom);
 
-    const PROJECTION = geoNaturalEarth()
-        .scale(WIDTH / 3 / Math.PI)
-        .translate([WIDTH / 4, HEIGHT / 2])
+    const PROJECTION = geoNaturalEarth() // a projection function that converts from a lon/lat point to an x/y point
+        .scale(100) // scale a projection, eg zoom in/out. The default scale factor on a projection is 150, so a scale of 450 is three times zoomed in and so on
+        .translate([WIDTH / 4, HEIGHT / 2]); // set the x/y value for the center (lon/lat) point of the map
 
     // Load external data and boot
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function(data){
@@ -27,15 +36,20 @@ export const map_implementer = function (){
             .data(data.features)
             .enter().append("path")
             .attr("fill", "#9370DB")
-            .attr("d", d3.geoPath().projection(PROJECTION))
+            .attr("d", d3.geoPath() // a function which converts GeoJSON data into SVG path
+            .projection(PROJECTION) // assigning it a projection function to calculate the position of each point on the path it creates
+            )
             .style("stroke", "#fff");
 
-        d3.selectAll('#map_implementer path')
+        const MAP_IMPLEMENTER_PATH =  d3.selectAll('#map_implementer g');
+
+        MAP_IMPLEMENTER_PATH
+            .selectAll('path')
             .on('click', click)
             .on('mouseover', mouseover)
             .on('mouseout', mouseout)
 
-        d3.select('#map_implementer g')
+        MAP_IMPLEMENTER_PATH
             .append('rect')
             .classed('maps_background', true)
             .attr("width", WIDTH/2 + MARGIN.left + MARGIN.right)
@@ -44,9 +58,12 @@ export const map_implementer = function (){
                 d3.selectAll('.implementer_selected')
                     .classed('implementer_selected', false);
                     
-                d3.selectAll('#map_implementer path')
+                MAP_IMPLEMENTER_PATH
+                    .selectAll('path')
                     .on('mouseover', mouseover)
                     .on('mouseout', mouseout);
+
+                    set_title();
              })
              .lower()
     })
@@ -55,20 +72,29 @@ export const map_implementer = function (){
 
 function mouseover (d){
     d3.select(this)
-        .classed('implementer_selected', true);
+        .classed('implementer_selected', true); //highlight path
+
+        set_title(d.properties.name)  //show country name
 }
 
 function mouseout (d){
     d3.select(this)
-        .classed('implementer_selected', false);
+        .classed('implementer_selected', false); //remove highlight path
+
+        set_title() //reset country name
 }
 
 function click (d){
     d3.selectAll('.implementer_selected')
         .classed('implementer_selected', false);
 
+    set_title(d.properties.name) //show country name
+
     d3.select(this)
         .classed('implementer_selected', true)
+        .on('mouseout', null);
+
+    d3.selectAll('#map_implementer g path')
         .on('mouseout', null);
 
     d3.selectAll('#map_implementer g path')
@@ -77,4 +103,9 @@ function click (d){
     console.log(d);
     let affected = d3.select('.affected_selected').empty() ? null : d3.select('.affected_selected').datum().properties.name; // check if affected is selected
     area_chart(affected, d.properties.name);
+}
+
+const set_title = function (set = 'Please, choose country...'){ //reset country title
+    d3.select('.title_implementer')
+        .text(set) 
 }
