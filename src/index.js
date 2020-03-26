@@ -121,7 +121,7 @@ export const area_chart = function (affected = 'Canada', implementer = 'China'){
 }
 
 // function to feed 'country-total values' to maps
-const DATA_FOR_MAP = function (data, type){
+export const DATA_FOR_MAP = function (data, type){
 
     let filtered = data.map( d => d[type]).filter((el, index, arr) => { return arr.indexOf(el) == index }); 
     let output = [];
