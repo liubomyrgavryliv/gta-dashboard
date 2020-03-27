@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import { map_affected } from './map_affected.js';
 import { map_implementer } from './map_implementer.js';
 import './style.css';
+import { AFFECTED_FLOW_BARS } from './affected_flow_bars.js';
 
 require("expose-loader?d3!d3"); // make d3 module available in the console
 
@@ -17,8 +18,8 @@ d3.select('body')
         .attr('id', 'div_area')
         .classed('row', true);
 
-// append divs for the maps
-const DIV_MAPS = d3.select('body')
+    // append divs for the maps
+export const DIV_MAPS = d3.select('body')
                     .append('div')
                     .attr('id', 'div_maps')
                     .classed('row', true);
@@ -71,14 +72,14 @@ d3.csv('./data/data.csv',   //url
         }).then(function(d) {
             console.log(d)
             data = d;
-            area_chart('Canada', 'United States of America');
+            area_chart();
            
             map_affected();     // build map Affected from the module map_affected.js
             map_implementer( DATA_FOR_MAP(data, 'implementer') );     // build map Implementer from the module map_implementer.js
     })
 
         
-export const area_chart = function (affected = 'Canada', implementer = 'China'){
+export const area_chart = function (affected = 'Brazil', implementer = 'Argentina'){
 
     let data_chart = data.filter(d => d.affected == affected && d.implementer == implementer) // modelling API request of Affected == Canada and implementer == United States of America
 
@@ -117,7 +118,9 @@ export const area_chart = function (affected = 'Canada', implementer = 'China'){
                 .attr("fill", "#cce5df")
                 .attr("stroke", "#69b3a2")
                 .attr("stroke-width", 1.5)
-                .attr("d", area)
+                .attr("d", area);
+
+    AFFECTED_FLOW_BARS(data_chart);
 }
 
 // function to feed 'country-total values' to maps

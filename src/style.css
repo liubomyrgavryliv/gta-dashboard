@@ -45,3 +45,8 @@ p   {
 .maps_background{
     fill: transparent;
 }
+
+.affected_bars {
+    fill: linear-gradient(#000066, white);
+    
+}
