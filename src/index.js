@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import { map_affected } from './map_affected.js';
 import { map_implementer } from './map_implementer.js';
 import './style.css';
-import { AFFECTED_FLOW_BARS } from './affected_flow_bars.js';
+import { CANVAS_AFFECTED_BARS, AFFECTED_FLOW_BARS } from './affected_flow_bars.js';
 
 require("expose-loader?d3!d3"); // make d3 module available in the console
 
@@ -57,7 +57,8 @@ var yAxis = d3.axisLeft().scale(y); //Initialize Y axis
 
 SVG_AREA_CHART.append("g")
                 .attr("class","Yaxis_area_chart");
-                
+
+CANVAS_AFFECTED_BARS(); // add empty canvas for affected flow bar chart
 
 var data;
 d3.csv('./data/data.csv',   //url

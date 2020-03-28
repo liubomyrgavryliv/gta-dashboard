@@ -1,7 +1,6 @@
 import { geoNaturalEarth } from "d3-geo-projection";
-import { MARGIN, WIDTH, HEIGHT } from './index.js';
-import { area_chart } from './index.js';
-import { DATA_FOR_MAP } from './index.js';
+import { MARGIN, WIDTH, HEIGHT, area_chart, DATA_FOR_MAP } from './index.js';
+import { geoNaturalEarth1Raw } from "d3";
 
 export const map_affected = function (){
 

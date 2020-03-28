@@ -1,48 +1,44 @@
-import { DIV_MAPS, MARGIN, WIDTH, HEIGHT } from './index.js';
+const MARGIN = {top: 30, right: 50, bottom: 30, left: 50},
+WIDTH = 800 - MARGIN.left - MARGIN.right,
+HEIGHT = 400 - MARGIN.top - MARGIN.bottom,
+duration = 500;
 
-export const AFFECTED_FLOW_BARS = function(data){
+var x = d3.scaleBand()
+        .rangeRound([0, WIDTH/4])
+        .paddingInner(.1)
+        .paddingOuter(.3);
 
-    console.log(data)
+var y = d3.scaleLinear()
+        .rangeRound([HEIGHT, 0]);
 
-    let data_bars = PREPARE_DATA(data);
-    console.log(data_bars)
+var xAxis = d3.axisBottom(x);
 
+var yAxis = d3.axisLeft(y);
 
-const DIV_AFFECTED_FLOW = DIV_MAPS
+export const CANVAS_AFFECTED_BARS = function(){
+
+const DIV_AFFECTED_FLOW = d3.select('#div_maps')
         .append('div')
         .attr('id', 'div_affected_flow')
         .classed('column', true);
 
 const SVG_AFFECTED_FLOW = DIV_AFFECTED_FLOW //set canvas for map
         .append("svg")
-        .attr('id', 'svg_affected_flow')
+        //.attr('id', 'svg_affected_flow')
         .attr("width", WIDTH/2 + MARGIN.left + MARGIN.right)
         .attr("height", HEIGHT + MARGIN.top + MARGIN.bottom);
 
-const SVG_G = SVG_AFFECTED_FLOW
+const G_AFFECTED_FLOW = SVG_AFFECTED_FLOW
         .append("g")
+        .attr('id', 'affected_flow')
         .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
 
-var x = d3.scaleBand()
-        .rangeRound([0, WIDTH/4])
-        .padding(0.1);
-
-var y = d3.scaleLinear()
-        .rangeRound([HEIGHT, 0]);
-
-
-    x.domain(data_bars.map(d => d.flow));
-        
-	y.domain([0, d3.max(data_bars, function (d) {
-				return Number(d.value);
-            })]);
-            
-    SVG_G.append("g")
+    G_AFFECTED_FLOW.append("g")
         .attr("transform", `translate(0,${HEIGHT})`)
-        .call(d3.axisBottom(x));
+        .classed('x_axis', true);
 
-    SVG_G.append("g")
-        .call(d3.axisLeft(y))
+    G_AFFECTED_FLOW.append("g")
+        .classed('y_axis', true)
         .append("text")
         .attr("fill", "#000")
         .attr("transform", "rotate(-90)")
@@ -50,15 +46,69 @@ var y = d3.scaleLinear()
         .attr("dy", "0.71em")
         .attr("text-anchor", "end")
         .text("Percentage");
+}
 
-    SVG_G.selectAll(".bar")
-        .data(data_bars)
-        .enter().append("rect")
+export const AFFECTED_FLOW_BARS = function(data){
+
+    let data_bars = PREPARE_DATA(data);
+    console.log(data_bars)
+
+    x.domain(data_bars.map(d => d.flow));
+        
+    y.domain([0, d3.max(data_bars, d => d.value)]);
+            
+const SVG_G = d3.select('#affected_flow');
+
+    SVG_G.select('.x_axis')
+        .transition()
+        .duration(duration)
+        .call(xAxis);
+
+    SVG_G.select('.y_axis')
+        .transition()
+        .duration(duration)
+        .call(yAxis);
+
+
+var bars = SVG_G.selectAll(".affected_bars")
+        .data(data_bars);
+
+        //Update Set
+    bars
+        .transition()
+        .duration(duration)
+        .attr("x", d => x(d.flow))
+        .attr("y", d => y(d.value))
+        .attr("width", x.bandwidth())
+        .attr("height", d => HEIGHT - y(d.value));
+
+        // Enter Set
+    bars
+        .enter()
+        .append("rect")
         .classed("affected_bars", true)
         .attr("x", d => x(d.flow))
-        .attr("y", d => y(Number(d.value)))
+        .attr("y", d => y(d.value))
+        // .attr("width", x.bandwidth())
+        //.attr("height", d => HEIGHT - y(d.value))
+        .merge(bars)
+        .attr("y", HEIGHT)
+        .attr("height", 0)
+        .transition()
+        .duration(duration)
+        .attr("x", d => x(d.flow))
+        .attr("y", d => y(d.value))
         .attr("width", x.bandwidth())
-        .attr("height", d => HEIGHT - y(Number(d.value)));
+        .attr("height", d => HEIGHT - y(d.value));
+
+        // Exit Set
+    bars
+        .exit()
+        .transition()
+        .duration(duration)
+        .attr("y", HEIGHT)
+        .attr("height", 0)
+        .remove();
 }
 
 
