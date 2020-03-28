@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
+
+body{
+    font-family: 'Roboto Mono', sans-serif;
+}
+
+g text {
+    font-family: 'Roboto Mono', sans-serif;
+}
+
+h1  {
+    font-weight: 600;
+    font-size: 1em;
+}
+
+p   {
+    font-weight: 500;
+    font-size: 1em;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+ }
+
+ .column{
+     text-align: center;
+ }
+
+ .affected_selected{
+     fill: #191970;
+ }
+
+ .implementer_selected{
+    fill:  #8B0000;
+}
+
+
+ .affected_unselected{
+    fill: #2F4F4F;
+}
+
+.maps_background{
+    fill: transparent;
+}
+
+.affected_bars {
+    fill: crimson;/* linear-gradient(#000066, white);*/
+    stroke-width: 0.1em;
+    stroke: black;
+}
