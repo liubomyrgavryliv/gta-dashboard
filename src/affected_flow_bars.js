@@ -11,6 +11,8 @@ var x = d3.scaleBand()
 var y = d3.scaleLinear()
         .rangeRound([HEIGHT, 0]);
 
+y.domain([0, 10]);
+
 var xAxis = d3.axisBottom(x);
 
 var yAxis = d3.axisLeft(y);
@@ -46,6 +48,11 @@ const G_AFFECTED_FLOW = SVG_AFFECTED_FLOW
         .attr("dy", "0.71em")
         .attr("text-anchor", "end")
         .text("Percentage");
+
+    G_AFFECTED_FLOW.select('.y_axis')
+        .transition()
+        .duration(duration)
+        .call(yAxis);
 }
 
 export const AFFECTED_FLOW_BARS = function(data){
@@ -55,7 +62,7 @@ export const AFFECTED_FLOW_BARS = function(data){
 
     x.domain(data_bars.map(d => d.flow));
         
-    y.domain([0, d3.max(data_bars, d => d.value)]);
+    //y.domain([0, d3.max(data_bars, d => d.value)]);
             
 const SVG_G = d3.select('#affected_flow');
 
@@ -64,36 +71,21 @@ const SVG_G = d3.select('#affected_flow');
         .duration(duration)
         .call(xAxis);
 
-    SVG_G.select('.y_axis')
-        .transition()
-        .duration(duration)
-        .call(yAxis);
+    // SVG_G.select('.y_axis')
+    //     .transition()
+    //     .duration(duration)
+    //     .call(yAxis);
 
 
-var bars = SVG_G.selectAll(".affected_bars")
+var bars = SVG_G.selectAll(".affected_bars") // select all existing bars. The first time this runs, there will be an empty selection
         .data(data_bars);
 
-        //Update Set
+    
     bars
-        .transition()
-        .duration(duration)
-        .attr("x", d => x(d.flow))
-        .attr("y", d => y(d.value))
-        .attr("width", x.bandwidth())
-        .attr("height", d => HEIGHT - y(d.value));
-
-        // Enter Set
-    bars
-        .enter()
+        .enter()    // Enter Set, eg add new bars 
         .append("rect")
         .classed("affected_bars", true)
-        .attr("x", d => x(d.flow))
-        .attr("y", d => y(d.value))
-        // .attr("width", x.bandwidth())
-        //.attr("height", d => HEIGHT - y(d.value))
-        .merge(bars)
-        .attr("y", HEIGHT)
-        .attr("height", 0)
+        .merge(bars) // Enter + Update set, eg add new (update) bars to existing ones
         .transition()
         .duration(duration)
         .attr("x", d => x(d.flow))
@@ -103,7 +95,7 @@ var bars = SVG_G.selectAll(".affected_bars")
 
         // Exit Set
     bars
-        .exit()
+        .exit() // remove unnecessary bars
         .transition()
         .duration(duration)
         .attr("y", HEIGHT)
