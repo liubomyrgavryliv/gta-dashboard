@@ -92,49 +92,8 @@ export const map_implementer = function (data_feeded){
         
                             set_title();
                      })
-                     .lower()
+                     .lower() // move background rectangle to the end of parent html element
         }
-
-
-    // Load external data and boot
-    /*d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson").then(function(data){
-        // Draw the map
-        SVG_MAP_IMPLEMENTER.append("g")
-            .selectAll("path")
-            .data(data.features)
-            .enter().append("path")
-            .attr("fill", "#9370DB")
-            .attr("d", d3.geoPath() // a function which converts GeoJSON data into SVG path
-            .projection(PROJECTION) // assigning it a projection function to calculate the position of each point on the path it creates
-            )
-            .style("stroke", "#fff");
-
-        const MAP_IMPLEMENTER_PATH =  d3.selectAll('#map_implementer g');
-
-        MAP_IMPLEMENTER_PATH
-            .selectAll('path')
-            .on('click', click)
-            .on('mouseover', mouseover)
-            .on('mouseout', mouseout)
-
-        MAP_IMPLEMENTER_PATH
-            .append('rect')
-            .classed('maps_background', true)
-            .attr("width", WIDTH/2 + MARGIN.left + MARGIN.right)
-            .attr("height", HEIGHT + MARGIN.top + MARGIN.bottom)
-            .on('click', () => { 
-                d3.selectAll('.implementer_selected')
-                    .classed('implementer_selected', false);
-                    
-                MAP_IMPLEMENTER_PATH
-                    .selectAll('path')
-                    .on('mouseover', mouseover)
-                    .on('mouseout', mouseout);
-
-                    set_title();
-             })
-             .lower()
-    })*/
 
 }
 

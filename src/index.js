@@ -58,10 +58,10 @@ var yAxis = d3.axisLeft().scale(y); //Initialize Y axis
 SVG_AREA_CHART.append("g")
                 .attr("class","Yaxis_area_chart");
 
-CANVAS_AFFECTED_BARS(); // add empty canvas for affected flow bar chart
+CANVAS_AFFECTED_BARS(); // initialize empty canvas for affected flow bar chart
 
 var data;
-d3.csv('./data/data.csv',   //url
+d3.csv('./data/data.csv',   // a promise to load data from url
     function (d){           // row conversion function
         return {
             affected: d.affected,
@@ -106,7 +106,7 @@ export const area_chart = function (affected = 'Brazil', implementer = 'Argentin
                     .y0(y(0))   // sets bottom 'limit', eg zero
                     .y1(d => y(d.value) );
 
-    var update = SVG_AREA_CHART.selectAll(".area_path") // create update selection and bind new data
+    var update = SVG_AREA_CHART.selectAll(".area_path") // create selection and bind new data
                     .data([data_chart]);
 
 

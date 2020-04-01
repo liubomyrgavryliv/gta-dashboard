@@ -91,7 +91,7 @@ const div_affected =  d3.select('#div_affected');
 
                     set_title();
                 })
-                .lower()
+                .lower() // move background rectangle to the end of parent html element
         }
 
 }

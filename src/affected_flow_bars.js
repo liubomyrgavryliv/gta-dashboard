@@ -3,21 +3,21 @@ WIDTH = 800 - MARGIN.left - MARGIN.right,
 HEIGHT = 400 - MARGIN.top - MARGIN.bottom,
 duration = 500;
 
-var x = d3.scaleBand()
-        .rangeRound([0, WIDTH/4])
-        .paddingInner(.1)
-        .paddingOuter(.3);
+var x = d3.scaleBand() // creates a categorical scale
+        .range([0, WIDTH/4]) //set a width to scale the categories at
+        .paddingInner(.1) //padding between individual bars
+        .paddingOuter(.3); //padding between bars and axis
 
-var y = d3.scaleLinear()
-        .rangeRound([HEIGHT, 0]);
+var y = d3.scaleLinear() // this is the quantitative scale for values
+        .rangeRound([HEIGHT, 0]); // the ouput range, which the input data should fit
 
-y.domain([0, 10]);
+y.domain([0, 10]); // I think this would be constant (0 to 1, or 1 to 100)
 
-var xAxis = d3.axisBottom(x);
+var xAxis = d3.axisBottom(x); //Initialize X axis
 
-var yAxis = d3.axisLeft(y);
+var yAxis = d3.axisLeft(y); //Initialize Y axis
 
-export const CANVAS_AFFECTED_BARS = function(){
+export const CANVAS_AFFECTED_BARS = function(){ // add initial svg and g elements to a page, where bars will be plotted
 
 const DIV_AFFECTED_FLOW = d3.select('#div_maps')
         .append('div')
@@ -55,30 +55,23 @@ const G_AFFECTED_FLOW = SVG_AFFECTED_FLOW
         .call(yAxis);
 }
 
-export const AFFECTED_FLOW_BARS = function(data){
+export const AFFECTED_FLOW_BARS = function(data){ // a function-feeder of new data for bars
 
-    let data_bars = PREPARE_DATA(data);
+    let data_bars = PREPARE_DATA(data); // parse data into meaningful format for bars
     console.log(data_bars)
 
-    x.domain(data_bars.map(d => d.flow));
-        
-    //y.domain([0, d3.max(data_bars, d => d.value)]);
+    x.domain(data_bars.map(d => d.flow)); // set a domain for X axis scale
             
 const SVG_G = d3.select('#affected_flow');
 
     SVG_G.select('.x_axis')
-        .transition()
+        .transition() // gradual animation between different states of X axis
         .duration(duration)
-        .call(xAxis);
-
-    // SVG_G.select('.y_axis')
-    //     .transition()
-    //     .duration(duration)
-    //     .call(yAxis);
+        .call(xAxis); // attach X axis
 
 
 var bars = SVG_G.selectAll(".affected_bars") // select all existing bars. The first time this runs, there will be an empty selection
-        .data(data_bars);
+        .data(data_bars); // bind data to a selection
 
     
     bars
@@ -91,7 +84,7 @@ var bars = SVG_G.selectAll(".affected_bars") // select all existing bars. The fi
         .attr("x", d => x(d.flow))
         .attr("y", d => y(d.value))
         .attr("width", x.bandwidth())
-        .attr("height", d => HEIGHT - y(d.value));
+        .attr("height", d => HEIGHT - y(d.value)); // since in svg Y 0 starts at the top, we need to normalize it to start from bottom 
 
         // Exit Set
     bars
