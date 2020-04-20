@@ -40,6 +40,7 @@ export const DIV_MAPS = d3.select('body')
 const SVG_AREA_CHART = d3.select("#div_area")
                             .append("svg")
                                 .attr('id', 'area_chart')
+                                .attr('preserveAspectRatio', 'xMidYMid meet')
                                 .append("g");
 
 var x = d3.scaleTime(); // this is the scale for time domains
@@ -111,20 +112,27 @@ export const area_chart = function (affected = 'Brazil', implementer = 'Argentin
 
         var SVG_AREA_CHART =  d3.select('#area_chart');
         
-            width = window.innerWidth - margin.left - margin.right - 400; //recalculate width based on window size
+            width = window.innerWidth - margin.left - margin.right - 200; //recalculate width based on window size
             height = 400 - margin.top - margin.bottom; //recalculate height based on window size
-
+            
             SVG_AREA_CHART
                 .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom);
+                .attr("height", height + margin.top + margin.bottom)
+                .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`);
 
             SVG_AREA_CHART
                 .select('g')
                 .attr("transform", `translate(${margin.left},${margin.top})`);
 
                x.range([ 0, width ]); // the ouput range, which the input data should fit
-           xAxis.scale(x); // set scale of X axis
 
+               let breakpoint = 430; //window width limit, after which only each second tick from x axis will be shown
+               if (window.innerWidth >= breakpoint){
+                xAxis.scale(x).ticks(d3.timeYear.every(1)); // set scale of X axis
+               } else {
+                xAxis.scale(x).ticks(d3.timeYear.every(2)); // set scale of X axis
+               }
+           
                y.range([ height, 0 ]); // the ouput range, which the input data should fit
            yAxis.scale(y); // set scale of Y axis
 

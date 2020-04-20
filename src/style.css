@@ -37,6 +37,13 @@ p   {
     fill:  #8B0000;
 }
 
+#div_affected{
+    width: 50vw;
+}
+
+#div_implementer{
+    width: 50vw;
+}
 
  .affected_unselected{
     fill: #2F4F4F;

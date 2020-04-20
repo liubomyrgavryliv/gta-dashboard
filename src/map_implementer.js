@@ -24,8 +24,10 @@ export const map_implementer = function (data_feeded){
     const SVG_MAP_IMPLEMENTER = div_implementer //set canvas for map
         .append("svg")
         .attr('id', 'map_implementer')
-        .attr("width", WIDTH/2 + MARGIN.left + MARGIN.right)
-        .attr("height", HEIGHT + MARGIN.top + MARGIN.bottom);
+        .attr("width", '100%') //WIDTH/2 + MARGIN.left + MARGIN.right)
+        .attr("height", '100%') //HEIGHT + MARGIN.top + MARGIN.bottom)
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .attr('viewBox', `0 0 ${WIDTH/2 + MARGIN.left + MARGIN.right} ${HEIGHT + MARGIN.top + MARGIN.bottom}`);
 
     const PROJECTION = geoNaturalEarth() // a projection function that converts from a lon/lat point to an x/y point
         .scale(100) // scale a projection, eg zoom in/out. The default scale factor on a projection is 150, so a scale of 450 is three times zoomed in and so on
