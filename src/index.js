@@ -114,7 +114,7 @@ export const area_chart = function (affected = 'Brazil', implementer = 'Argentin
         
             width = window.innerWidth - margin.left - margin.right - 200; //recalculate width based on window size
             height = 400 - margin.top - margin.bottom; //recalculate height based on window size
-            
+
             SVG_AREA_CHART
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -126,7 +126,7 @@ export const area_chart = function (affected = 'Brazil', implementer = 'Argentin
 
                x.range([ 0, width ]); // the ouput range, which the input data should fit
 
-               let breakpoint = 430; //window width limit, after which only each second tick from x axis will be shown
+               let breakpoint = 520; //window width limit, after which only each second tick from x axis will be shown
                if (window.innerWidth >= breakpoint){
                 xAxis.scale(x).ticks(d3.timeYear.every(1)); // set scale of X axis
                } else {

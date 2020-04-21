@@ -4,18 +4,34 @@ body{
     font-family: 'Roboto Mono', sans-serif;
 }
 
+#div_affected{
+    width: 35vw;
+}
+
+#div_implementer{
+    width: 35vw;
+}
+
+#div_affected_flow{
+    width: 13vw;
+}
+
+#div_maps{
+    width: 100vw;
+}
+
 g text {
     font-family: 'Roboto Mono', sans-serif;
 }
 
 h1  {
     font-weight: 600;
-    font-size: 1em;
+    font-size: 1vw;
 }
 
 p   {
     font-weight: 500;
-    font-size: 1em;
+    font-size: 1vw;
 }
 
 .row {
@@ -35,14 +51,6 @@ p   {
 
  .implementer_selected{
     fill:  #8B0000;
-}
-
-#div_affected{
-    width: 50vw;
-}
-
-#div_implementer{
-    width: 50vw;
 }
 
  .affected_unselected{

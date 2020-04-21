@@ -27,8 +27,10 @@ const DIV_AFFECTED_FLOW = d3.select('#div_maps')
 const SVG_AFFECTED_FLOW = DIV_AFFECTED_FLOW //set canvas for map
         .append("svg")
         //.attr('id', 'svg_affected_flow')
-        .attr("width", WIDTH/2 + MARGIN.left + MARGIN.right)
-        .attr("height", HEIGHT + MARGIN.top + MARGIN.bottom);
+        .attr("width", '100%')
+        .attr("height", '100%')
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .attr('viewBox', `0 0 250 400`)//${WIDTH/2 + MARGIN.left + MARGIN.right} ${HEIGHT + MARGIN.top + MARGIN.bottom}`);
 
 const G_AFFECTED_FLOW = SVG_AFFECTED_FLOW
         .append("g")
