@@ -46,9 +46,10 @@ const G_AFFECTED_FLOW = SVG_AFFECTED_FLOW
         .append("text")
         .attr("fill", "#000")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
+        .attr("y", 5 - MARGIN.left)
+        .attr("x", 0 - (HEIGHT/2))
         .attr("dy", "0.71em")
-        .attr("text-anchor", "end")
+        .attr("text-anchor", "middle")
         .text("Percentage");
 
     G_AFFECTED_FLOW.select('.y_axis')

@@ -20,8 +20,14 @@ body{
     width: 100vw;
 }
 
+#div_area{
+    width: 100vw;
+    height: 20vw;
+}
+
 g text {
     font-family: 'Roboto Mono', sans-serif;
+    /*font-size: 0.5vw;*/
 }
 
 h1  {

@@ -113,12 +113,14 @@ export const area_chart = function (affected = 'Brazil', implementer = 'Argentin
         var SVG_AREA_CHART =  d3.select('#area_chart');
         
             width = window.innerWidth - margin.left - margin.right - 200; //recalculate width based on window size
-            height = 400 - margin.top - margin.bottom; //recalculate height based on window size
+            //height = 400 - margin.top - margin.bottom; //recalculate height based on window size
+            height = width*0.3;
 
             SVG_AREA_CHART
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`);
+                .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+                .attr("width", '100%')
+                .attr("height", '100%')
+                .attr('preserveAspectRatio', 'xMidYMid meet')
 
             SVG_AREA_CHART
                 .select('g')
